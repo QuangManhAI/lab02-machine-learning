@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+datasets/
+images/end_to_end_project/*.png
+models/*.pkl
+02_end_to_end_machine_learning_project.ipynb
