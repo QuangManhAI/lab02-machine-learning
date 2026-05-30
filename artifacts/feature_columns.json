@@ -1,0 +1,19 @@
+[
+  "Unit_Price",
+  "year",
+  "month",
+  "quarter",
+  "day_of_week",
+  "is_weekend",
+  "product_order_count",
+  "product_avg_revenue",
+  "category_avg_revenue",
+  "state_avg_revenue",
+  "region_avg_revenue",
+  "City",
+  "State",
+  "Region",
+  "Category",
+  "Sub_Category",
+  "Product_Name"
+]

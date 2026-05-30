@@ -1,0 +1,142 @@
+{
+  "selected_model": {
+    "variant": "Model_B_No_Quantity",
+    "model": "Ridge",
+    "include_quantity": false,
+    "feature_count": 17,
+    "MAE": 331.20224255191886,
+    "MSE": 272432.281134545,
+    "RMSE": 521.9504585059246,
+    "R2": 0.5070370412224015
+  },
+  "metrics": [
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "HistGradientBoosting",
+      "include_quantity": true,
+      "feature_count": 18,
+      "MAE": 5.12244562837,
+      "MSE": 190.1855756473032,
+      "RMSE": 13.790778645431997,
+      "R2": 0.9996558614724457
+    },
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "DecisionTree",
+      "include_quantity": true,
+      "feature_count": 18,
+      "MAE": 3.3735867190912385,
+      "MSE": 985.2578752234557,
+      "RMSE": 31.388817678011634,
+      "R2": 0.9982171876427184
+    },
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "RandomForest",
+      "include_quantity": true,
+      "feature_count": 18,
+      "MAE": 5.015518637368385,
+      "MSE": 1996.1188533511208,
+      "RMSE": 44.67794593925644,
+      "R2": 0.9963880467765355
+    },
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "Ridge",
+      "include_quantity": true,
+      "feature_count": 18,
+      "MAE": 199.38282448767814,
+      "MSE": 95778.03904620212,
+      "RMSE": 309.480272466925,
+      "R2": 0.8266907823202704
+    },
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "Baseline_Mean",
+      "include_quantity": true,
+      "feature_count": 18,
+      "MAE": 509.80408951604085,
+      "MSE": 552643.4202132298,
+      "RMSE": 743.3999059814507,
+      "R2": -1.6680943188962516e-06
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "Ridge",
+      "include_quantity": false,
+      "feature_count": 17,
+      "MAE": 331.20224255191886,
+      "MSE": 272432.281134545,
+      "RMSE": 521.9504585059246,
+      "R2": 0.5070370412224015
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "HistGradientBoosting",
+      "include_quantity": false,
+      "feature_count": 17,
+      "MAE": 330.44743496884126,
+      "MSE": 272520.5316060024,
+      "RMSE": 522.0349907870184,
+      "R2": 0.5068773530483643
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "RandomForest",
+      "include_quantity": false,
+      "feature_count": 17,
+      "MAE": 331.0552461392981,
+      "MSE": 272940.5794316951,
+      "RMSE": 522.4371535713125,
+      "R2": 0.506117281524831
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "DecisionTree",
+      "include_quantity": false,
+      "feature_count": 17,
+      "MAE": 340.22758211113563,
+      "MSE": 287986.68546364503,
+      "RMSE": 536.6439093697468,
+      "R2": 0.47889153237093973
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "Baseline_Mean",
+      "include_quantity": false,
+      "feature_count": 17,
+      "MAE": 509.80408951604085,
+      "MSE": 552643.4202132298,
+      "RMSE": 743.3999059814507,
+      "R2": -1.6680943188962516e-06
+    }
+  ],
+  "feature_columns": [
+    "Unit_Price",
+    "year",
+    "month",
+    "quarter",
+    "day_of_week",
+    "is_weekend",
+    "product_order_count",
+    "product_avg_revenue",
+    "category_avg_revenue",
+    "state_avg_revenue",
+    "region_avg_revenue",
+    "City",
+    "State",
+    "Region",
+    "Category",
+    "Sub_Category",
+    "Product_Name"
+  ],
+  "test_start_date": "2024-10-01",
+  "excluded_columns": [
+    "Order_ID",
+    "Customer_Name",
+    "Country",
+    "Profit",
+    "Revenue"
+  ],
+  "note": "Final model excludes Quantity to avoid leakage. Model A is included only for comparison."
+}

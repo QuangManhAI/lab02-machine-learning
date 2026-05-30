@@ -1,0 +1,422 @@
+{
+  "data_checks": {
+    "rows": 200000,
+    "columns": 14,
+    "stripped_columns": [
+      " Unit_Price ",
+      " Revenue ",
+      " Profit "
+    ],
+    "missing_total": 0,
+    "duplicate_rows": 0,
+    "date_parse_failures": 0,
+    "date_min": "2023-01-01",
+    "date_max": "2024-12-31",
+    "revenue_formula_mismatch_rows": 0,
+    "revenue_formula_max_abs_diff": 0.0
+  },
+  "target_summary": {
+    "mean": 712.0387246500001,
+    "median": 464.88,
+    "std": 742.4715558876646,
+    "min": 17.03,
+    "max": 9014.25,
+    "skew": 2.5356668176627624
+  },
+  "top_category_revenue": [
+    {
+      "Category": "Electronics",
+      "orders": 51230,
+      "quantity": 97115,
+      "revenue": 57485698.06,
+      "avg_revenue": 1122.11,
+      "median_revenue": 837.06
+    },
+    {
+      "Category": "Home & Furniture",
+      "orders": 50564,
+      "quantity": 90403,
+      "revenue": 47674426.96,
+      "avg_revenue": 942.85,
+      "median_revenue": 709.31
+    },
+    {
+      "Category": "Clothing & Apparel",
+      "orders": 62298,
+      "quantity": 115523,
+      "revenue": 27134365.3,
+      "avg_revenue": 435.56,
+      "median_revenue": 331.27
+    },
+    {
+      "Category": "Accessories",
+      "orders": 35908,
+      "quantity": 67759,
+      "revenue": 10113254.61,
+      "avg_revenue": 281.64,
+      "median_revenue": 213.3
+    }
+  ],
+  "top_sub_category_revenue": [
+    {
+      "Sub_Category": "Bedding",
+      "orders": 10171,
+      "quantity": 18575,
+      "revenue": 13042783.3,
+      "avg_revenue": 1282.35,
+      "median_revenue": 975.0
+    },
+    {
+      "Sub_Category": "Laptops",
+      "orders": 8656,
+      "quantity": 17630,
+      "revenue": 12358319.81,
+      "avg_revenue": 1427.72,
+      "median_revenue": 1037.54
+    },
+    {
+      "Sub_Category": "Smartphones",
+      "orders": 8442,
+      "quantity": 16985,
+      "revenue": 10904335.31,
+      "avg_revenue": 1291.68,
+      "median_revenue": 951.83
+    },
+    {
+      "Sub_Category": "Furniture",
+      "orders": 10096,
+      "quantity": 19002,
+      "revenue": 9697778.92,
+      "avg_revenue": 960.56,
+      "median_revenue": 722.46
+    },
+    {
+      "Sub_Category": "Wearables",
+      "orders": 8563,
+      "quantity": 16755,
+      "revenue": 9216507.48,
+      "avg_revenue": 1076.32,
+      "median_revenue": 810.12
+    },
+    {
+      "Sub_Category": "Kitchenware",
+      "orders": 10091,
+      "quantity": 19541,
+      "revenue": 9117341.17,
+      "avg_revenue": 903.51,
+      "median_revenue": 676.86
+    },
+    {
+      "Sub_Category": "Home Appliances",
+      "orders": 8360,
+      "quantity": 16080,
+      "revenue": 8638544.88,
+      "avg_revenue": 1033.32,
+      "median_revenue": 789.34
+    },
+    {
+      "Sub_Category": "Tablets",
+      "orders": 8557,
+      "quantity": 15187,
+      "revenue": 8373830.76,
+      "avg_revenue": 978.59,
+      "median_revenue": 760.46
+    },
+    {
+      "Sub_Category": "Home Decor",
+      "orders": 10165,
+      "quantity": 17024,
+      "revenue": 8070216.82,
+      "avg_revenue": 793.92,
+      "median_revenue": 625.06
+    },
+    {
+      "Sub_Category": "TVs & Audio",
+      "orders": 8652,
+      "quantity": 14478,
+      "revenue": 7994159.82,
+      "avg_revenue": 923.97,
+      "median_revenue": 726.58
+    }
+  ],
+  "top_product_revenue": [
+    {
+      "Product_Name": "Tempur-Pedic Mattress",
+      "orders": 5523,
+      "quantity": 10333,
+      "revenue": 9061755.86,
+      "avg_revenue": 1640.73,
+      "median_revenue": 1221.98
+    },
+    {
+      "Product_Name": "Instant Pot",
+      "orders": 8657,
+      "quantity": 18200,
+      "revenue": 8903475.26,
+      "avg_revenue": 1028.47,
+      "median_revenue": 768.11
+    },
+    {
+      "Product_Name": "MacBook Air",
+      "orders": 3926,
+      "quantity": 8763,
+      "revenue": 7362516.81,
+      "avg_revenue": 1875.32,
+      "median_revenue": 1464.6
+    },
+    {
+      "Product_Name": "Apple Watch",
+      "orders": 5931,
+      "quantity": 12368,
+      "revenue": 6834472.35,
+      "avg_revenue": 1152.33,
+      "median_revenue": 860.82
+    },
+    {
+      "Product_Name": "Apple iPhone 14",
+      "orders": 3636,
+      "quantity": 7642,
+      "revenue": 5740819.18,
+      "avg_revenue": 1578.88,
+      "median_revenue": 1167.65
+    },
+    {
+      "Product_Name": "iPad Pro",
+      "orders": 5421,
+      "quantity": 10075,
+      "revenue": 5574458.89,
+      "avg_revenue": 1028.31,
+      "median_revenue": 781.94
+    },
+    {
+      "Product_Name": "KitchenAid Mixer",
+      "orders": 5376,
+      "quantity": 9831,
+      "revenue": 4989740.69,
+      "avg_revenue": 928.15,
+      "median_revenue": 703.52
+    },
+    {
+      "Product_Name": "Storage Rack",
+      "orders": 5707,
+      "quantity": 9394,
+      "revenue": 4463941.27,
+      "avg_revenue": 782.19,
+      "median_revenue": 614.98
+    },
+    {
+      "Product_Name": "Brooklinen Sheets",
+      "orders": 4648,
+      "quantity": 8242,
+      "revenue": 3981027.44,
+      "avg_revenue": 856.5,
+      "median_revenue": 660.93
+    },
+    {
+      "Product_Name": "Samsung Galaxy S23",
+      "orders": 3365,
+      "quantity": 6974,
+      "revenue": 3851240.02,
+      "avg_revenue": 1144.5,
+      "median_revenue": 854.23
+    }
+  ],
+  "top_region_revenue": [
+    {
+      "Region": "East",
+      "orders": 57034,
+      "quantity": 105965,
+      "revenue": 44980048.22,
+      "avg_revenue": 788.65,
+      "median_revenue": 547.19
+    },
+    {
+      "Region": "West",
+      "orders": 55428,
+      "quantity": 102931,
+      "revenue": 36242841.73,
+      "avg_revenue": 653.87,
+      "median_revenue": 416.57
+    },
+    {
+      "Region": "Centre",
+      "orders": 49603,
+      "quantity": 91464,
+      "revenue": 36081894.34,
+      "avg_revenue": 727.41,
+      "median_revenue": 482.19
+    },
+    {
+      "Region": "South",
+      "orders": 37935,
+      "quantity": 70440,
+      "revenue": 25102960.64,
+      "avg_revenue": 661.74,
+      "median_revenue": 428.53
+    }
+  ],
+  "top_state_revenue": [
+    {
+      "State": "California",
+      "orders": 10272,
+      "quantity": 19061,
+      "revenue": 6766728.65,
+      "avg_revenue": 658.75,
+      "median_revenue": 413.42
+    },
+    {
+      "State": "Arizona",
+      "orders": 10262,
+      "quantity": 19032,
+      "revenue": 6668187.2,
+      "avg_revenue": 649.79,
+      "median_revenue": 411.23
+    },
+    {
+      "State": "New Jersey",
+      "orders": 5780,
+      "quantity": 10712,
+      "revenue": 4552067.75,
+      "avg_revenue": 787.55,
+      "median_revenue": 548.01
+    },
+    {
+      "State": "Vermont",
+      "orders": 5677,
+      "quantity": 10582,
+      "revenue": 4550459.19,
+      "avg_revenue": 801.56,
+      "median_revenue": 552.64
+    },
+    {
+      "State": "New York",
+      "orders": 5766,
+      "quantity": 10730,
+      "revenue": 4541307.27,
+      "avg_revenue": 787.6,
+      "median_revenue": 551.28
+    },
+    {
+      "State": "Connecticut",
+      "orders": 5726,
+      "quantity": 10666,
+      "revenue": 4515748.44,
+      "avg_revenue": 788.64,
+      "median_revenue": 545.68
+    },
+    {
+      "State": "Delaware",
+      "orders": 5673,
+      "quantity": 10565,
+      "revenue": 4515199.69,
+      "avg_revenue": 795.91,
+      "median_revenue": 554.96
+    },
+    {
+      "State": "Pennsylvania",
+      "orders": 5765,
+      "quantity": 10756,
+      "revenue": 4495637.28,
+      "avg_revenue": 779.82,
+      "median_revenue": 552.5
+    },
+    {
+      "State": "New Hampshire",
+      "orders": 5682,
+      "quantity": 10532,
+      "revenue": 4489012.87,
+      "avg_revenue": 790.04,
+      "median_revenue": 539.04
+    },
+    {
+      "State": "Massachusetts",
+      "orders": 5627,
+      "quantity": 10484,
+      "revenue": 4471454.84,
+      "avg_revenue": 794.64,
+      "median_revenue": 549.22
+    }
+  ],
+  "top_city_revenue": [
+    {
+      "City": "Burlington",
+      "orders": 2920,
+      "quantity": 5487,
+      "revenue": 2367578.63,
+      "avg_revenue": 810.81,
+      "median_revenue": 564.22
+    },
+    {
+      "City": "Manchester",
+      "orders": 2912,
+      "quantity": 5349,
+      "revenue": 2316261.28,
+      "avg_revenue": 795.42,
+      "median_revenue": 548.09
+    },
+    {
+      "City": "Rochester",
+      "orders": 2905,
+      "quantity": 5416,
+      "revenue": 2312165.68,
+      "avg_revenue": 795.93,
+      "median_revenue": 556.44
+    },
+    {
+      "City": "Wilmington",
+      "orders": 2874,
+      "quantity": 5406,
+      "revenue": 2311588.97,
+      "avg_revenue": 804.31,
+      "median_revenue": 560.91
+    },
+    {
+      "City": "Providence",
+      "orders": 2901,
+      "quantity": 5355,
+      "revenue": 2298465.51,
+      "avg_revenue": 792.3,
+      "median_revenue": 537.81
+    },
+    {
+      "City": "Jersey City",
+      "orders": 2905,
+      "quantity": 5343,
+      "revenue": 2290243.36,
+      "avg_revenue": 788.38,
+      "median_revenue": 556.06
+    },
+    {
+      "City": "Boston",
+      "orders": 2878,
+      "quantity": 5353,
+      "revenue": 2274264.86,
+      "avg_revenue": 790.22,
+      "median_revenue": 531.81
+    },
+    {
+      "City": "Philadelphia",
+      "orders": 2833,
+      "quantity": 5279,
+      "revenue": 2262453.14,
+      "avg_revenue": 798.61,
+      "median_revenue": 571.82
+    },
+    {
+      "City": "Newark",
+      "orders": 2875,
+      "quantity": 5369,
+      "revenue": 2261824.39,
+      "avg_revenue": 786.72,
+      "median_revenue": 541.26
+    },
+    {
+      "City": "New Haven",
+      "orders": 2882,
+      "quantity": 5399,
+      "revenue": 2261371.05,
+      "avg_revenue": 784.65,
+      "median_revenue": 540.7
+    }
+  ]
+}
