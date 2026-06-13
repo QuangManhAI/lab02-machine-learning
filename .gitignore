@@ -8,3 +8,12 @@ datasets/
 images/end_to_end_project/*.png
 models/*.pkl
 02_end_to_end_machine_learning_project.ipynb
+.DS_Store
+data/new_data/holidays_events.csv
+data/new_data/sample_submission.csv
+.gitignore
+data/new_data/oil.csv
+data/new_data/test.csv
+data/new_data/stores.csv
+data/new_data/train.csv
+data/new_data/transactions.csv
