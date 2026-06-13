@@ -1,0 +1,123 @@
+{
+  "selected_model": {
+    "model": "Lasso",
+    "MAE": 0.8547919598577288,
+    "RMSE": 1.0863005173202172,
+    "R2": 0.025706757071585762,
+    "MAE_rounded": 0.8692766364902507,
+    "Exact_Accuracy": 0.2594881615598886,
+    "Within_1_Accuracy": 0.910950557103064
+  },
+  "metrics": [
+    {
+      "model": "Lasso",
+      "MAE": 0.8547919598577288,
+      "RMSE": 1.0863005173202172,
+      "R2": 0.025706757071585762,
+      "MAE_rounded": 0.8692766364902507,
+      "Exact_Accuracy": 0.2594881615598886,
+      "Within_1_Accuracy": 0.910950557103064
+    },
+    {
+      "model": "Poisson",
+      "MAE": 0.8551358709184239,
+      "RMSE": 1.0864811544840562,
+      "R2": 0.025382706409682543,
+      "MAE_rounded": 0.8692766364902507,
+      "Exact_Accuracy": 0.2594881615598886,
+      "Within_1_Accuracy": 0.910950557103064
+    },
+    {
+      "model": "Ridge",
+      "MAE": 0.855166400192116,
+      "RMSE": 1.0866332507275565,
+      "R2": 0.02510981441458593,
+      "MAE_rounded": 0.8692766364902507,
+      "Exact_Accuracy": 0.2594881615598886,
+      "Within_1_Accuracy": 0.910950557103064
+    },
+    {
+      "model": "HistGradientBoosting",
+      "MAE": 0.854628078218987,
+      "RMSE": 1.0867057048872886,
+      "R2": 0.02497980329250149,
+      "MAE_rounded": 0.8692548746518106,
+      "Exact_Accuracy": 0.2594881615598886,
+      "Within_1_Accuracy": 0.910928795264624
+    },
+    {
+      "model": "RandomForest",
+      "MAE": 0.8558357130509526,
+      "RMSE": 1.0878549999363034,
+      "R2": 0.02291635880516618,
+      "MAE_rounded": 0.8685584958217271,
+      "Exact_Accuracy": 0.26096796657381616,
+      "Within_1_Accuracy": 0.9103194637883009
+    },
+    {
+      "model": "Baseline_Mean",
+      "MAE": 0.8666606303633394,
+      "RMSE": 1.1005440076058624,
+      "R2": -1.0464656594821875e-05,
+      "MAE_rounded": 0.8692766364902507,
+      "Exact_Accuracy": 0.2594881615598886,
+      "Within_1_Accuracy": 0.910950557103064
+    },
+    {
+      "model": "Baseline_Median",
+      "MAE": 0.8512578342618384,
+      "RMSE": 1.3913390451073064,
+      "R2": -0.5982902996673614,
+      "MAE_rounded": 0.8512578342618384,
+      "Exact_Accuracy": 0.5090094011142061,
+      "Within_1_Accuracy": 0.7684975626740947
+    }
+  ],
+  "downstream_revenue_metrics": [
+    {
+      "method": "Unit_Price * Quantity_hat",
+      "MAE": 330.1593842462888,
+      "RMSE": 520.6708729444691,
+      "R2": 0.5094511212212516
+    },
+    {
+      "method": "Unit_Price * rounded_Quantity_hat",
+      "MAE": 335.37915368210304,
+      "RMSE": 531.9714148533717,
+      "R2": 0.4879264858126743
+    }
+  ],
+  "feature_columns": [
+    "Unit_Price",
+    "year",
+    "month",
+    "quarter",
+    "day_of_week",
+    "is_weekend",
+    "product_order_count",
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+    "City",
+    "State",
+    "Region",
+    "Category",
+    "Sub_Category",
+    "Product_Name"
+  ],
+  "target": "Quantity",
+  "forbidden_features": [
+    "Country",
+    "Customer_Name",
+    "Order_ID",
+    "Profit",
+    "Quantity",
+    "Revenue"
+  ],
+  "test_start_date": "2024-10-01",
+  "train_rows": 154048,
+  "test_rows": 45952,
+  "leakage_note": "Quantity model excludes Revenue and Profit; aggregate features are computed from train data only."
+}
