@@ -21,7 +21,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.dummy import DummyRegressor
 from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso, Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
@@ -56,7 +56,31 @@ AGG_FEATURES = [
     "category_avg_revenue",
     "state_avg_revenue",
     "region_avg_revenue",
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+    "expected_revenue_product",
+    "expected_revenue_category",
+    "expected_revenue_sub_category",
+    "expected_revenue_state",
+    "expected_revenue_region",
 ]
+QUANTITY_AGG_FEATURES = [
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+]
+EXPECTED_REVENUE_FEATURE_SOURCES = {
+    "expected_revenue_product": "product_avg_quantity",
+    "expected_revenue_category": "category_avg_quantity",
+    "expected_revenue_sub_category": "sub_category_avg_quantity",
+    "expected_revenue_state": "state_avg_quantity",
+    "expected_revenue_region": "region_avg_quantity",
+}
 
 
 @dataclass(frozen=True)
@@ -167,6 +191,7 @@ def add_aggregate_features(
     train = train_df.copy()
     test = test_df.copy()
     global_mean = float(train[TARGET].mean())
+    global_quantity_mean = float(train["Quantity"].mean())
 
     mapping_specs = {
         "product_order_count": ("Product_Name", train.groupby("Product_Name").size()),
@@ -174,6 +199,14 @@ def add_aggregate_features(
         "category_avg_revenue": ("Category", train.groupby("Category")[TARGET].mean()),
         "state_avg_revenue": ("State", train.groupby("State")[TARGET].mean()),
         "region_avg_revenue": ("Region", train.groupby("Region")[TARGET].mean()),
+        "product_avg_quantity": ("Product_Name", train.groupby("Product_Name")["Quantity"].mean()),
+        "category_avg_quantity": ("Category", train.groupby("Category")["Quantity"].mean()),
+        "sub_category_avg_quantity": (
+            "Sub_Category",
+            train.groupby("Sub_Category")["Quantity"].mean(),
+        ),
+        "state_avg_quantity": ("State", train.groupby("State")["Quantity"].mean()),
+        "region_avg_quantity": ("Region", train.groupby("Region")["Quantity"].mean()),
     }
 
     mappings: dict[str, dict[Any, float]] = {}
@@ -181,9 +214,19 @@ def add_aggregate_features(
     for feature_name, (source_col, series) in mapping_specs.items():
         mapping = series.to_dict()
         mappings[feature_name] = mapping
-        defaults[feature_name] = float(series.median() if feature_name.endswith("count") else global_mean)
+        if feature_name.endswith("count"):
+            default = float(series.median())
+        elif feature_name in QUANTITY_AGG_FEATURES:
+            default = global_quantity_mean
+        else:
+            default = global_mean
+        defaults[feature_name] = default
         train[feature_name] = train[source_col].map(mapping).fillna(defaults[feature_name])
         test[feature_name] = test[source_col].map(mapping).fillna(defaults[feature_name])
+
+    for feature_name, quantity_feature in EXPECTED_REVENUE_FEATURE_SOURCES.items():
+        train[feature_name] = train["Unit_Price"] * train[quantity_feature]
+        test[feature_name] = test["Unit_Price"] * test[quantity_feature]
 
     return train, test, mappings, defaults
 
@@ -482,6 +525,8 @@ Revenue is right-skewed, so MAE and RMSE should both be reported. RMSE will pena
 - `Country` is excluded because it has one value only.
 - Model A includes `Quantity` and is useful to demonstrate leakage because `Revenue = Quantity * Unit_Price`.
 - Model B excludes `Quantity` and is the business-realistic model for predicting revenue before the sold quantity is known.
+- Regularized linear models such as Ridge and Lasso are included to reduce variance and keep Model B usable without the leaked quantity signal.
+- Model B uses train-only historical average quantity features and `Unit_Price * historical_avg_quantity` proxies, never the current row's `Quantity`.
 
 ## Plot Files
 
@@ -562,6 +607,12 @@ def make_models(include_quantity: bool) -> dict[str, Pipeline]:
             steps=[
                 ("preprocess", one_hot),
                 ("model", Ridge(alpha=1.0)),
+            ]
+        ),
+        "Lasso": Pipeline(
+            steps=[
+                ("preprocess", one_hot),
+                ("model", Lasso(alpha=0.2, max_iter=20000, random_state=RANDOM_STATE)),
             ]
         ),
         "DecisionTree": Pipeline(
@@ -767,6 +818,8 @@ def build_model_report(
 - Model A includes `Quantity`. This demonstrates leakage because `Revenue = Quantity * Unit_Price`.
 - Model B excludes `Quantity`. This is the business-realistic model for predicting revenue before sold quantity is known.
 - Excluded from all models: `Order_ID`, `Customer_Name`, `Country`, `Profit`, `Revenue`.
+- Ridge and Lasso are compared as regularized linear models for the non-leaking Model B setup.
+- Model B includes train-only historical average quantity proxies and expected-revenue interaction features, but still excludes the current order's `Quantity`.
 
 ## Metrics
 

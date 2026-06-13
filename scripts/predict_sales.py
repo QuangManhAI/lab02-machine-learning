@@ -57,11 +57,26 @@ def add_features(raw: dict[str, Any], bundle: dict[str, Any]) -> pd.DataFrame:
         "category_avg_revenue": "Category",
         "state_avg_revenue": "State",
         "region_avg_revenue": "Region",
+        "product_avg_quantity": "Product_Name",
+        "category_avg_quantity": "Category",
+        "sub_category_avg_quantity": "Sub_Category",
+        "state_avg_quantity": "State",
+        "region_avg_quantity": "Region",
     }
     for feature_name, source_col in source_by_aggregate.items():
         mapping = aggregate_mappings[feature_name]
         default = aggregate_defaults[feature_name]
         df[feature_name] = df[source_col].map(mapping).fillna(default)
+
+    expected_revenue_feature_sources = {
+        "expected_revenue_product": "product_avg_quantity",
+        "expected_revenue_category": "category_avg_quantity",
+        "expected_revenue_sub_category": "sub_category_avg_quantity",
+        "expected_revenue_state": "state_avg_quantity",
+        "expected_revenue_region": "region_avg_quantity",
+    }
+    for feature_name, quantity_feature in expected_revenue_feature_sources.items():
+        df[feature_name] = df["Unit_Price"] * df[quantity_feature]
 
     missing = sorted(set(feature_columns).difference(df.columns))
     if missing:

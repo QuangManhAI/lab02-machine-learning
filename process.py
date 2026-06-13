@@ -39,7 +39,31 @@ AGG_FEATURES = [
     "category_avg_revenue",
     "state_avg_revenue",
     "region_avg_revenue",
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+    "expected_revenue_product",
+    "expected_revenue_category",
+    "expected_revenue_sub_category",
+    "expected_revenue_state",
+    "expected_revenue_region",
 ]
+QUANTITY_AGG_FEATURES = [
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+]
+EXPECTED_REVENUE_FEATURE_SOURCES = {
+    "expected_revenue_product": "product_avg_quantity",
+    "expected_revenue_category": "category_avg_quantity",
+    "expected_revenue_sub_category": "sub_category_avg_quantity",
+    "expected_revenue_state": "state_avg_quantity",
+    "expected_revenue_region": "region_avg_quantity",
+}
 
 
 @dataclass(frozen=True)
@@ -165,6 +189,7 @@ def add_aggregate_features(
     train = train_df.copy()
     test = test_df.copy()
     global_mean = float(train[TARGET].mean())
+    global_quantity_mean = float(train["Quantity"].mean())
 
     specs = {
         "product_order_count": ("Product_Name", train.groupby("Product_Name").size()),
@@ -172,17 +197,34 @@ def add_aggregate_features(
         "category_avg_revenue": ("Category", train.groupby("Category")[TARGET].mean()),
         "state_avg_revenue": ("State", train.groupby("State")[TARGET].mean()),
         "region_avg_revenue": ("Region", train.groupby("Region")[TARGET].mean()),
+        "product_avg_quantity": ("Product_Name", train.groupby("Product_Name")["Quantity"].mean()),
+        "category_avg_quantity": ("Category", train.groupby("Category")["Quantity"].mean()),
+        "sub_category_avg_quantity": (
+            "Sub_Category",
+            train.groupby("Sub_Category")["Quantity"].mean(),
+        ),
+        "state_avg_quantity": ("State", train.groupby("State")["Quantity"].mean()),
+        "region_avg_quantity": ("Region", train.groupby("Region")["Quantity"].mean()),
     }
 
     mappings: dict[str, dict[Any, float]] = {}
     defaults: dict[str, float] = {}
     for feature_name, (source_col, series) in specs.items():
         mapping = series.to_dict()
-        default = float(series.median() if feature_name.endswith("count") else global_mean)
+        if feature_name.endswith("count"):
+            default = float(series.median())
+        elif feature_name in QUANTITY_AGG_FEATURES:
+            default = global_quantity_mean
+        else:
+            default = global_mean
         mappings[feature_name] = mapping
         defaults[feature_name] = default
         train[feature_name] = train[source_col].map(mapping).fillna(default)
         test[feature_name] = test[source_col].map(mapping).fillna(default)
+
+    for feature_name, quantity_feature in EXPECTED_REVENUE_FEATURE_SOURCES.items():
+        train[feature_name] = train["Unit_Price"] * train[quantity_feature]
+        test[feature_name] = test["Unit_Price"] * test[quantity_feature]
 
     return train, test, mappings, defaults
 
@@ -232,6 +274,11 @@ def prepare_single_input(
         "category_avg_revenue": "Category",
         "state_avg_revenue": "State",
         "region_avg_revenue": "Region",
+        "product_avg_quantity": "Product_Name",
+        "category_avg_quantity": "Category",
+        "sub_category_avg_quantity": "Sub_Category",
+        "state_avg_quantity": "State",
+        "region_avg_quantity": "Region",
     }
     for feature_name, source_col in source_by_aggregate.items():
         row[feature_name] = (
@@ -239,6 +286,9 @@ def prepare_single_input(
             .map(aggregate_mappings[feature_name])
             .fillna(aggregate_defaults[feature_name])
         )
+
+    for feature_name, quantity_feature in EXPECTED_REVENUE_FEATURE_SOURCES.items():
+        row[feature_name] = row["Unit_Price"] * row[quantity_feature]
 
     missing = sorted(set(feature_columns).difference(row.columns))
     if missing:

@@ -119,6 +119,8 @@ Revenue is right-skewed, so MAE and RMSE should both be reported. RMSE will pena
 - `Country` is excluded because it has one value only.
 - Model A includes `Quantity` and is useful to demonstrate leakage because `Revenue = Quantity * Unit_Price`.
 - Model B excludes `Quantity` and is the business-realistic model for predicting revenue before the sold quantity is known.
+- Regularized linear models such as Ridge and Lasso are included to reduce variance and keep Model B usable without the leaked quantity signal.
+- Model B uses train-only historical average quantity features and `Unit_Price * historical_avg_quantity` proxies, never the current row's `Quantity`.
 
 ## Plot Files
 

@@ -1,7 +1,7 @@
 {
   "selected_model": {
     "variant": "Model_B_No_Quantity",
-    "model": "Ridge",
+    "model": "Lasso",
     "include_quantity": false,
     "features": [
       "Unit_Price",
@@ -15,6 +15,16 @@
       "category_avg_revenue",
       "state_avg_revenue",
       "region_avg_revenue",
+      "product_avg_quantity",
+      "category_avg_quantity",
+      "sub_category_avg_quantity",
+      "state_avg_quantity",
+      "region_avg_quantity",
+      "expected_revenue_product",
+      "expected_revenue_category",
+      "expected_revenue_sub_category",
+      "expected_revenue_state",
+      "expected_revenue_region",
       "City",
       "State",
       "Region",
@@ -22,10 +32,10 @@
       "Sub_Category",
       "Product_Name"
     ],
-    "MAE": 331.20224255191886,
-    "MSE": 272432.281134545,
-    "RMSE": 521.9504585059246,
-    "R2": 0.5070370412224015
+    "MAE": 329.9080805254261,
+    "MSE": 271077.997420375,
+    "RMSE": 520.6515124537477,
+    "R2": 0.5094876014276066
   },
   "metrics": [
     {
@@ -36,47 +46,57 @@
       "MSE": 552643.4202132298,
       "RMSE": 743.3999059814507,
       "R2": -1.6680943188962516e-06,
-      "feature_count": 18
+      "feature_count": 28
     },
     {
       "variant": "Model_A_With_Quantity",
       "model": "Ridge",
       "include_quantity": true,
-      "MAE": 199.38282448767814,
-      "MSE": 95778.03904620212,
-      "RMSE": 309.480272466925,
-      "R2": 0.8266907823202704,
-      "feature_count": 18
+      "MAE": 196.50961589191135,
+      "MSE": 94477.10893169098,
+      "RMSE": 307.3712883983977,
+      "R2": 0.829044799824149,
+      "feature_count": 28
+    },
+    {
+      "variant": "Model_A_With_Quantity",
+      "model": "Lasso",
+      "include_quantity": true,
+      "MAE": 196.1621055714303,
+      "MSE": 94419.45542920059,
+      "RMSE": 307.27748929786674,
+      "R2": 0.829149123148291,
+      "feature_count": 28
     },
     {
       "variant": "Model_A_With_Quantity",
       "model": "DecisionTree",
       "include_quantity": true,
-      "MAE": 3.3735867190912385,
-      "MSE": 985.2578752234557,
-      "RMSE": 31.388817678011634,
-      "R2": 0.9982171876427184,
-      "feature_count": 18
+      "MAE": 3.8811078973692785,
+      "MSE": 1196.1884325333513,
+      "RMSE": 34.585957157976,
+      "R2": 0.9978355113186239,
+      "feature_count": 28
     },
     {
       "variant": "Model_A_With_Quantity",
       "model": "RandomForest",
       "include_quantity": true,
-      "MAE": 5.015518637368385,
-      "MSE": 1996.1188533511208,
-      "RMSE": 44.67794593925644,
-      "R2": 0.9963880467765355,
-      "feature_count": 18
+      "MAE": 4.707485044978143,
+      "MSE": 1804.4175935687483,
+      "RMSE": 42.478436807028906,
+      "R2": 0.9967349279164289,
+      "feature_count": 28
     },
     {
       "variant": "Model_A_With_Quantity",
       "model": "HistGradientBoosting",
       "include_quantity": true,
-      "MAE": 5.12244562837,
-      "MSE": 190.1855756473032,
-      "RMSE": 13.790778645431997,
-      "R2": 0.9996558614724457,
-      "feature_count": 18
+      "MAE": 5.899985730938687,
+      "MSE": 214.1502886129784,
+      "RMSE": 14.633874695820598,
+      "R2": 0.9996124976105691,
+      "feature_count": 28
     },
     {
       "variant": "Model_B_No_Quantity",
@@ -86,47 +106,57 @@
       "MSE": 552643.4202132298,
       "RMSE": 743.3999059814507,
       "R2": -1.6680943188962516e-06,
-      "feature_count": 17
+      "feature_count": 27
     },
     {
       "variant": "Model_B_No_Quantity",
       "model": "Ridge",
       "include_quantity": false,
-      "MAE": 331.20224255191886,
-      "MSE": 272432.281134545,
-      "RMSE": 521.9504585059246,
-      "R2": 0.5070370412224015,
-      "feature_count": 17
+      "MAE": 330.135346728452,
+      "MSE": 271194.63824020437,
+      "RMSE": 520.7635146976066,
+      "R2": 0.509276541257285,
+      "feature_count": 27
+    },
+    {
+      "variant": "Model_B_No_Quantity",
+      "model": "Lasso",
+      "include_quantity": false,
+      "MAE": 329.9080805254261,
+      "MSE": 271077.997420375,
+      "RMSE": 520.6515124537477,
+      "R2": 0.5094876014276066,
+      "feature_count": 27
     },
     {
       "variant": "Model_B_No_Quantity",
       "model": "DecisionTree",
       "include_quantity": false,
-      "MAE": 340.22758211113563,
-      "MSE": 287986.68546364503,
-      "RMSE": 536.6439093697468,
-      "R2": 0.47889153237093973,
-      "feature_count": 17
+      "MAE": 340.7927234266018,
+      "MSE": 290659.6456348161,
+      "RMSE": 539.128598420466,
+      "R2": 0.4740548428670832,
+      "feature_count": 27
     },
     {
       "variant": "Model_B_No_Quantity",
       "model": "RandomForest",
       "include_quantity": false,
-      "MAE": 331.0552461392981,
-      "MSE": 272940.5794316951,
-      "RMSE": 522.4371535713125,
-      "R2": 0.506117281524831,
-      "feature_count": 17
+      "MAE": 331.0476669809464,
+      "MSE": 273077.99547741795,
+      "RMSE": 522.5686514491832,
+      "R2": 0.5058686288313949,
+      "feature_count": 27
     },
     {
       "variant": "Model_B_No_Quantity",
       "model": "HistGradientBoosting",
       "include_quantity": false,
-      "MAE": 330.44743496884126,
-      "MSE": 272520.5316060024,
-      "RMSE": 522.0349907870184,
-      "R2": 0.5068773530483643,
-      "feature_count": 17
+      "MAE": 329.9251930715546,
+      "MSE": 271391.88665551547,
+      "RMSE": 520.9528641398524,
+      "R2": 0.5089196226057177,
+      "feature_count": 27
     }
   ],
   "feature_columns": [
@@ -141,6 +171,16 @@
     "category_avg_revenue",
     "state_avg_revenue",
     "region_avg_revenue",
+    "product_avg_quantity",
+    "category_avg_quantity",
+    "sub_category_avg_quantity",
+    "state_avg_quantity",
+    "region_avg_quantity",
+    "expected_revenue_product",
+    "expected_revenue_category",
+    "expected_revenue_sub_category",
+    "expected_revenue_state",
+    "expected_revenue_region",
     "City",
     "State",
     "Region",
@@ -163,7 +203,12 @@
       "product_avg_revenue": 711.8181239613626,
       "category_avg_revenue": 711.8181239613626,
       "state_avg_revenue": 711.8181239613626,
-      "region_avg_revenue": 711.8181239613626
+      "region_avg_revenue": 711.8181239613626,
+      "product_avg_quantity": 1.8548179788117989,
+      "category_avg_quantity": 1.8548179788117989,
+      "sub_category_avg_quantity": 1.8548179788117989,
+      "state_avg_quantity": 1.8548179788117989,
+      "region_avg_quantity": 1.8548179788117989
     },
     "aggregate_feature_source": "computed from training data only to avoid time leakage",
     "train_rows": 154048,
@@ -177,7 +222,12 @@
       "product_avg_revenue": 49,
       "category_avg_revenue": 4,
       "state_avg_revenue": 47,
-      "region_avg_revenue": 4
+      "region_avg_revenue": 4,
+      "product_avg_quantity": 49,
+      "category_avg_quantity": 4,
+      "sub_category_avg_quantity": 19,
+      "state_avg_quantity": 47,
+      "region_avg_quantity": 4
     }
   },
   "leakage_note": "Deployment model excludes Quantity; Model A with Quantity is included only for comparison."
