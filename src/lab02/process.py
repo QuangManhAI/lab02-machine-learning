@@ -14,7 +14,7 @@ from typing import Any
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_DATA_PATH = PROJECT_ROOT / "data" / "product_sales_dataset_final.csv"
 
 TARGET = "Revenue"

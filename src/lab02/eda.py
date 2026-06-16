@@ -15,7 +15,7 @@ from scipy import stats
 from sklearn.metrics import mean_absolute_error
 from sklearn.preprocessing import StandardScaler
 
-from process import DATE_COLUMN, RANDOM_STATE, TARGET
+from .process import DATE_COLUMN, RANDOM_STATE, TARGET
 
 
 def ensure_dir(path: str | Path) -> Path:
