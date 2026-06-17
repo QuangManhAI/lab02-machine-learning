@@ -1,5 +1,5 @@
 # Lab 02: Dự đoán doanh số bán hàng (Product Sales & Store Sales Forecasting)
-
+- data: "https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data"
 Dự án này triển khai các giải pháp Machine Learning nhằm dự đoán doanh số bán hàng phục vụ quản lý tồn kho và chiến lược tiếp thị, kết hợp giữa việc tự xây dựng thuật toán từ đầu (Scratch Models) và đối chiếu với thư viện Scikit-Learn.
 
 ---
