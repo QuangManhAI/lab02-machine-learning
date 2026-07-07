@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store Sales Forecasting — Full Analysis Report</title>
+<style>
+:root {
+  --primary: #2c3e50; --accent: #3498db; --accent-light: #ebf5fb;
+  --bg: #f8f9fa; --card: #fff; --text: #2c3e50; --muted: #7f8c8d; --border: #dee2e6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+        background:var(--bg); color:var(--text); font-size:0.95rem; line-height:1.6; }
+.header { background:linear-gradient(135deg,#2c3e50 0%,#3498db 100%); color:#fff; padding:3rem 2rem; text-align:center; }
+.header h1 { font-size:2.2rem; margin-bottom:0.5rem; }
+.header p { font-size:1.05rem; opacity:0.9; }
+.header .meta { margin-top:0.8rem; font-size:0.85rem; opacity:0.7; }
+.container { max-width:1100px; margin:0 auto; padding:2rem 1.5rem; }
+.toc { background:var(--card); border-radius:10px; padding:1.5rem 2rem; margin-bottom:2rem; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+.toc h2 { margin-bottom:0.8rem; font-size:1.2rem; }
+.toc ol { columns:2 280px; column-gap:2rem; padding-left:1.2rem; }
+.toc li { margin:0.3rem 0; }
+.toc a { color:var(--accent); text-decoration:none; }
+.toc a:hover { text-decoration:underline; }
+.section { background:var(--card); border-radius:10px; box-shadow:0 2px 12px rgba(0,0,0,0.06); margin-bottom:1.8rem; overflow:hidden; }
+.section-header { background:var(--accent-light); padding:1.2rem 2rem; border-bottom:2px solid var(--accent); }
+.section-header h2 { font-size:1.25rem; }
+.section-header .step { color:var(--accent); font-weight:700; }
+.section-body { padding:1.5rem 2rem 2rem; }
+.section-body p { margin-bottom:0.8rem; }
+.figure { margin:1.5rem 0 0.5rem; text-align:center; }
+.figure img { max-width:100%; height:auto; border-radius:8px; border:1px solid var(--border); box-shadow:0 1px 6px rgba(0,0,0,0.08); }
+.caption { font-size:0.85rem; font-style:italic; color:var(--muted); margin-top:0.4rem; }
+.insight { background:#fff3cd; border-left:4px solid #ffc107; padding:0.8rem 1.2rem; border-radius:0 6px 6px 0; margin:0.8rem 0; font-size:0.92rem; }
+.insight strong { color:#856404; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+table { width:100%; border-collapse:collapse; font-size:0.9rem; margin:0.8rem 0; }
+th,td { padding:0.5rem 0.8rem; text-align:left; border-bottom:1px solid var(--border); }
+th { background:var(--accent-light); font-weight:600; }
+.best { background:#d4edda; font-weight:600; }
+.footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.85rem; }
+@media (max-width:700px) { .two-col { grid-template-columns:1fr; } .toc ol { columns:1; } .header h1 { font-size:1.6rem; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Store Sales Forecasting</h1>
+  <p>Full analytical report: EDA, model comparison, and log-transform analysis</p>
+  <div class="meta">2026-07-07 18:04 &bull; 14 sections &bull; RMSLE primary metric</div>
+</div>
+
+<div class="container">
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">Data Overview</a></li>
+    <li><a href="#s2">Missing Values &amp; Data Quality</a></li>
+    <li><a href="#s3">Target Distribution</a></li>
+    <li><a href="#s4">Product Family Analysis</a></li>
+    <li><a href="#s5">Trend &amp; Seasonality</a></li>
+    <li><a href="#s6">Promotion Impact</a></li>
+    <li><a href="#s7">Store Characteristics</a></li>
+    <li><a href="#s8">Oil Price &amp; Economics</a></li>
+    <li><a href="#s9">Holidays &amp; Events</a></li>
+    <li><a href="#s10">Correlation Matrix</a></li>
+    <li><a href="#s11">Model Comparison</a></li>
+    <li><a href="#s12">Loss Curves</a></li>
+    <li><a href="#s13">Model Diagnostics</a></li>
+    <li><a href="#s14">Conclusion &amp; Recommendations</a></li>
+  </ol>
+</div>
+
+<!-- 1 -->
+<div class="section" id="s1">
+  <div class="section-header"><h2><span class="step">1.</span> Data Overview</h2></div>
+  <div class="section-body">
+    <p>The dataset contains daily sales records across <strong>54 stores</strong> and <strong>33 product families</strong>
+    in Ecuador spanning ~5 years (3,000,888 training rows, 28,512 test rows). Data comes from 6 CSV files:
+    <code>train.csv</code>, <code>test.csv</code>, <code>stores.csv</code>, <code>oil.csv</code>,
+    <code>holidays_events.csv</code>, and <code>transactions.csv</code>.</p>
+    <p>Features include calendar attributes (<code>dayofweek</code>, <code>month</code>, etc.), store metadata
+    (<code>type</code>, <code>cluster</code>), external signals (oil price, holidays), and time-series lag/rolling
+    features (shifted 16 days to prevent data leakage). Training uses the most recent <strong>365 days</strong>
+    with the last <strong>16 days</strong> held out for validation — matching the test horizon.</p>
+    <div class="insight"><strong>Metric:</strong> <strong>RMSLE</strong> (Root Mean Squared Logarithmic Error)
+    penalises relative error, making it robust to the right-skewed sales distribution. Target: RMSLE &lt; 0.50.</div>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="section" id="s2">
+  <div class="section-header"><h2><span class="step">2.</span> Missing Values &amp; Data Quality</h2></div>
+  <div class="section-body">
+    <p>Only the <code>oil</code> table has missing values — <strong>dcoilwtico</strong> (oil price) is missing on
+    weekends and holidays when markets are closed. This is structural missingness, not random. All other tables
+    have complete data.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_001.png" alt="Missing values bar chart">
+      <div class="caption"><strong>Figure 1:</strong> Oil price has ~3.5% missing values (weekends/holidays). No other column is affected.</div>
+    </div>
+    <div class="insight"><strong>Treatment:</strong> Forward-fill then backward-fill (<code>ffill().bfill()</code>) for oil prices. Lag/rolling features filled with 0.</div>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="section" id="s3">
+  <div class="section-header"><h2><span class="step">3.</span> Target Distribution</h2></div>
+  <div class="section-body">
+    <p>Sales are heavily right-skewed with many zeros (~19% of rows). Applying <code>log1p</code> makes the
+    distribution approximately normal, confirming the choice of RMSLE and log-transformed training target.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_002.png" alt="Target distribution">
+      <div class="caption"><strong>Figure 2:</strong> Raw sales (left), log1p(sales) (center), boxplot (right). Log transform stabilises variance.</div>
+    </div>
+    <div class="insight"><strong>Key finding:</strong> Log transform is essential — models trained on raw sales would optimise for large values at the expense of typical days.</div>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="section" id="s4">
+  <div class="section-header"><h2><span class="step">4.</span> Product Family Analysis</h2></div>
+  <div class="section-body">
+    <p>Grocery items dominate sales volume, while electronics and home appliances have lower but more variable sales.
+    The category mix has remained stable year-over-year, suggesting a single global model is appropriate.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_003.png" alt="Product family analysis">
+      <div class="caption"><strong>Figure 3:</strong> Top 15 families by total sales (left) and yearly heatmap (right).</div>
+    </div>
+    <div class="insight"><strong>Implication:</strong> Top 3 families (GROCERY I, BEVERAGES, CLEANING) drive ~40% of sales. Per-family models could help for the top few.</div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="section" id="s5">
+  <div class="section-header"><h2><span class="step">5.</span> Trend &amp; Seasonality</h2></div>
+  <div class="section-body">
+    <p>Sales show clear yearly seasonality (peaks in December) and weekly patterns (weekdays higher than weekends).
+    A long-term upward trend reflects economic growth. The <strong>16-day shift</strong> in lag features catches
+    the weekly pattern while preventing look-ahead.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_004.png" alt="Trend and seasonality">
+      <div class="caption"><strong>Figure 4:</strong> Monthly sales trend and decomposition into seasonal components.</div>
+    </div>
+    <div class="insight"><strong>Key pattern:</strong> December peak is ~30% above yearly average. Lag_364 captures this yearly seasonality.</div>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="section" id="s6">
+  <div class="section-header"><h2><span class="step">6.</span> Promotion Impact</h2></div>
+  <div class="section-body">
+    <p>Promotions (<code>onpromotion</code>) have a clear positive effect on sales. Higher onpromotion values
+    correlate with higher sales, though the relationship is non-linear with diminishing returns.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_005.png" alt="Promotion impact">
+      <div class="caption"><strong>Figure 5:</strong> Sales by promotion bucket (left) and promotion-sales correlation.</div>
+    </div>
+    <div class="insight"><strong>Action:</strong> onpromotion is a critical feature for both linear and tree models. Log-transform helps linear models handle its skew.</div>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="section" id="s7">
+  <div class="section-header"><h2><span class="step">7.</span> Store Characteristics</h2></div>
+  <div class="section-body">
+    <p>Store type correlates with sales volume. Type A stores (larger) have higher sales. Cluster grouping
+    provides a more granular segmentation. These categorical features help capture store-level heterogeneity.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_006.png" alt="Store characteristics">
+      <div class="caption"><strong>Figure 6:</strong> Sales by store type (left), log-scale distribution (center), and cluster (right).</div>
+    </div>
+    <div class="insight"><strong>Finding:</strong> Type A and B stores account for ~80% of sales. Store type is an important categorical feature.</div>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="section" id="s8">
+  <div class="section-header"><h2><span class="step">8.</span> Oil Price &amp; External Economics</h2></div>
+  <div class="section-body">
+    <p>Ecuador is a major oil exporter. Oil prices affect national income and consumer spending. However,
+    the correlation with sales is weak (|r| &lt; 0.2), suggesting oil price adds limited predictive value
+    at the daily level.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_007.png" alt="Oil price correlation">
+      <div class="caption"><strong>Figure 7:</strong> Monthly sales vs average oil price (left) and scatter plot (right). Correlation is weak.</div>
+    </div>
+    <div class="insight"><strong>Caveat:</strong> Oil may have a lagged effect not captured by same-day price. Engineer lagged oil features for deeper analysis.</div>
+  </div>
+</div>
+
+<!-- 9 -->
+<div class="section" id="s9">
+  <div class="section-header"><h2><span class="step">9.</span> Holidays &amp; Events</h2></div>
+  <div class="section-body">
+    <p>Holidays drive predictable sales spikes. Most holidays are national or local events. The
+    <code>transferred</code> flag indicates holidays moved to a different date, which we exclude from
+    the holiday indicator to avoid misleading the model.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_008.png" alt="Holiday analysis">
+      <div class="caption"><strong>Figure 8:</strong> Holiday type distribution (left), sales around holidays (center), and transaction patterns.</div>
+    </div>
+    <div class="insight"><strong>Processing:</strong> Transferred holidays are excluded from the holiday flag. <code>is_holiday</code> and <code>holiday_count</code> are binary and count features.</div>
+  </div>
+</div>
+
+<!-- 10 -->
+<div class="section" id="s10">
+  <div class="section-header"><h2><span class="step">10.</span> Correlation Matrix</h2></div>
+  <div class="section-body">
+    <p>The correlation matrix reveals feature relationships. Lag features are highly correlated with the target
+    (as expected). Calendar features show weak but useful signals. Oil price correlation is near zero.</p>
+    <div class="figure">
+      <img src="reports/EDA/eda_009.png" alt="Correlation matrix">
+      <div class="caption"><strong>Figure 9:</strong> Pearson correlation matrix of all numeric features and target.</div>
+    </div>
+    <div class="insight"><strong>Takeaway:</strong> Lag_16 and Lag_28 dominate correlation with sales. This is why even simple lag baselines achieve RMSLE ~0.55–0.63.</div>
+  </div>
+</div>
+
+<!-- 11 -->
+<div class="section" id="s11">
+  <div class="section-header"><h2><span class="step">11.</span> Model Comparison</h2></div>
+  <div class="section-body">
+    <p>Six scratch models were trained (Ridge, MLP, HGB × no-log, log-features) plus four time-series baselines.
+    HGB dominates regardless of feature transform. Log-transform dramatically improves Ridge and MLP.</p>
+
+    <div class="figure">
+      <img src="reports/EDA/rmsle_comparison.png" alt="RMSLE Comparison">
+      <div class="caption"><strong>Figure 10:</strong> Full RMSLE comparison — baselines (blue), no-log ML (orange), log-feature ML (teal).</div>
+    </div>
+
+    <table><thead><tr><th>Model</th><th>RMSLE</th><th>MAE</th><th>MSE</th><th>RMSE</th><th>R²</th></tr></thead><tbody>
+    <tr class="best"><td>HGB_LogFeat</td><td>0.4648</td><td>91.2</td><td>136,513.0</td><td>369.5</td><td>0.9124</td></tr>
+<tr><td>HGB_Scratch</td><td>0.4648</td><td>91.2</td><td>136,513.0</td><td>369.5</td><td>0.9124</td></tr>
+<tr><td>MLP_LogFeat</td><td>0.4805</td><td>93.6</td><td>90,686.0</td><td>301.1</td><td>0.9418</td></tr>
+<tr><td>Ridge_LogFeat</td><td>0.5123</td><td>99.7</td><td>114,384.0</td><td>338.2</td><td>0.9266</td></tr>
+<tr><td>MLP_Scratch</td><td>0.6042</td><td>126.3</td><td>395,022.0</td><td>628.5</td><td>0.7465</td></tr>
+<tr><td>Ridge_Scratch</td><td>0.7986</td><td>218.3</td><td>1,867,041.0</td><td>1366.4</td><td>-0.1980</td></tr>
+    </tbody></table>
+
+    <div class="figure">
+      <img src="reports/EDA/rmsle_delta.png" alt="RMSLE Delta">
+      <div class="caption"><strong>Figure 11:</strong> Per-family RMSLE before and after log transform.</div>
+    </div>
+
+    <table><thead><tr><th>Model</th><th>No-Log</th><th>Log Feat</th><th>Delta</th></tr></thead><tbody>
+    <tr><td>Ridge</td><td>0.7986</td><td>0.5123</td><td>↓ 0.2863</td></tr>
+<tr><td>MLP</td><td>0.6042</td><td>0.4805</td><td>↓ 0.1237</td></tr>
+<tr><td>HGB</td><td>0.4648</td><td>0.4648</td><td>= 0.0000</td></tr>
+    </tbody></table>
+
+    <div class="insight"><strong>Best model:</strong> HGB_LogFeat (RMSLE=0.4648). Ridge improves 35.8%, MLP improves 20.5%. HGB is unchanged — tree-based models are invariant to monotonic transforms.</div>
+  </div>
+</div>
+
+<!-- 12 -->
+<div class="section" id="s12">
+  <div class="section-header"><h2><span class="step">12.</span> Loss Curves</h2></div>
+  <div class="section-body">
+    <p>Training and validation MSE loss curves confirm convergence behaviour. MLP with log features converges
+    to a lower final loss. HGB validation loss stabilises well before 160 iterations with no overfitting.</p>
+
+    <div class="two-col">
+      <div class="figure">
+        <img src="reports/EDA/loss_curves_nolog.png" alt="Loss curves no-log">
+        <div class="caption"><strong>Figure 12:</strong> Loss curves for no-log models (Ridge closed-form, MLP epoch, HGB iteration).</div>
+      </div>
+      <div class="figure">
+        <img src="reports/EDA/loss_curves_log.png" alt="Loss curves log">
+        <div class="caption"><strong>Figure 13:</strong> Loss curves for log-feature models.</div>
+      </div>
+    </div>
+    <div class="insight"><strong>Observation:</strong> MLP_LogFeat reaches MSE ~90K vs MLP_Scratch ~395K — log features dramatically improve neural network convergence.</div>
+  </div>
+</div>
+
+<!-- 13 -->
+<div class="section" id="s13">
+  <div class="section-header"><h2><span class="step">13.</span> Model Diagnostics</h2></div>
+  <div class="section-body">
+    <p>Diagnostic plots for the best model (HGB) show actual vs predicted alignment, residual distribution,
+    error by time and store type, feature importance, and error by product family.</p>
+
+    <div class="figure">
+      <img src="reports/EDA/eda_016.png" alt="Diagnostics 1">
+      <div class="caption"><strong>Figure 14:</strong> Actual vs predicted (left) and residual analysis (right).</div>
+    </div>
+    <div class="figure">
+      <img src="reports/EDA/eda_017.png" alt="Diagnostics 2">
+      <div class="caption"><strong>Figure 15:</strong> Error by store type (left) and error over time (right).</div>
+    </div>
+    <div class="figure">
+      <img src="reports/EDA/eda_018.png" alt="Diagnostics 3">
+      <div class="caption"><strong>Figure 16:</strong> Feature importance (left) and error by product family (right).</div>
+    </div>
+    <div class="insight"><strong>Key diagnostic:</strong> Lag features dominate importance (lag_16, lag_28, lag_364). Error is not uniformly distributed across families — some families are harder to forecast than others.</div>
+  </div>
+</div>
+
+<!-- 14 -->
+<div class="section" id="s14">
+  <div class="section-header"><h2><span class="step">14.</span> Conclusion &amp; Recommendations</h2></div>
+  <div class="section-body">
+    <p><strong>HistGradientBoosting</strong> is the best model (RMSLE = 0.4648), significantly
+    outperforming baselines and linear models without requiring feature transforms. It is recommended as the
+    production model.</p>
+
+    <p><strong>Log-transforming skewed features</strong> is highly beneficial for linear models (Ridge −35.8%,
+    MLP −20.5% RMSLE). This is a zero-cost improvement at inference time and should be applied whenever
+    linear or neural models are used.</p>
+
+    <p><strong>EDA insights</strong> validate the modelling decisions: log transform for the target, 16-day shift
+    for lag features, and a single global model rather than per-family models (though top families could benefit
+    from custom models).</p>
+
+    <div class="insight"><strong>Recommended next steps:</strong> (1) Hyperparameter tuning for HGB (max_iter,
+    learning_rate, max_leaf_nodes). (2) More lag windows (lag_7, lag_14). (3) Per-family models for top-5
+    families. (4) Advanced models (LightGBM, XGBoost). (5) External data (weather, inflation).</div>
+  </div>
+</div>
+
+<div class="footer">
+  Generated from store_sales_forecasting pipeline &bull; 14 sections &bull; 20260707_180457
+</div>
+
+</div>
+</body>
+</html>
